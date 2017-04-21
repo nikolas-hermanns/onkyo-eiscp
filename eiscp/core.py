@@ -186,8 +186,8 @@ def command_to_iscp(command, arguments=None, zone=None):
 
     prefix = commands.COMMAND_MAPPINGS[group].get(command, command)
     if not prefix in commands.COMMANDS[group]:
-        raise ValueError('"%s" is not a valid command in zone "%s"'
-                % (command, zone))
+        raise ValueError('"%s" is not a valid command in zone "%s": All vailid commands: %s'
+                % (command, zone, ', '.join(commands.COMMAND_MAPPINGS[group].keys())))
 
     # Resolve the argument to the command. This is a bit more involved,
     # because some commands support ranges (volume) or patterns
@@ -212,7 +212,9 @@ def command_to_iscp(command, arguments=None, zone=None):
             # TODO: patterns not yet supported
         else:
             raise ValueError('"%s" is not a valid argument for command '
-                             '"%s" in zone "%s"' % (argument, command, zone))
+                             '"%s" in zone "%s". Possible arguments are: %s'
+                             % (argument, command, zone,
+                                ', '.join(commands.VALUE_MAPPINGS[group][prefix].keys())))
 
     return '%s%s' % (prefix, value)
 
